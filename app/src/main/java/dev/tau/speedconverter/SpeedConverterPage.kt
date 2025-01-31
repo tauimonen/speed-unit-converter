@@ -41,12 +41,14 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.tau.speedconverter.utils.speedTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,9 +63,14 @@ fun SpeedConverterPage(modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Speed Converter") },
+                title = {
+                    Text(
+                        text = "Speed Converter",
+                        style = speedTypography.displayLarge
+                    )
+                },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = Color(0xFF00FFFF) // Light blue background for TopAppBar
+                    containerColor = colorResource(id = R.color.light_blue)
                 )
             )
         }
@@ -184,8 +191,8 @@ fun MyFilledButton(
         enabled = enabled,
         shape = shape,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF00FFFF), // Light blue background
-            contentColor = Color.White // White text
+            containerColor = colorResource(id = R.color.light_blue),
+            contentColor = Color.White
         ),
         elevation = elevation,
         border = border,
