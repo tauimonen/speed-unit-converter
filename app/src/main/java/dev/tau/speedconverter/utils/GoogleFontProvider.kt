@@ -12,7 +12,7 @@ val provider = GoogleFont.Provider(
     certificates = R.array.com_google_android_gms_fonts_certs
 )
 
-val fontName = GoogleFont("Bangers")
+val fontName = GoogleFont("Orbitron")
 
 val googleFontFamily = FontFamily(
     Font(googleFont = fontName, fontProvider = provider)

@@ -66,7 +66,7 @@ fun SpeedConverterPage(modifier: Modifier = Modifier) {
                 title = {
                     Text(
                         text = "Speed Converter",
-                        style = speedTypography.displayLarge
+                        style = speedTypography.displaySmall
                     )
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
