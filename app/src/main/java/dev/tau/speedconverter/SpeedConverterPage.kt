@@ -2,33 +2,38 @@ package dev.tau.speedconverter
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,9 +51,10 @@ fun SpeedConverterPage(modifier: Modifier = Modifier) {
         var convertedSpeed = remember { mutableStateOf("") }
 
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .padding(it)
+                .padding(it),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TextField(
                 value = speedToBeConverted.value,
@@ -56,38 +62,27 @@ fun SpeedConverterPage(modifier: Modifier = Modifier) {
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 label = { Text("Speed in km/h") },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(32.dp)
+                    .size(200.dp, 100.dp)
+                    .padding(16.dp)
                     .focusRequester(focusRequester)
             )
 
-            Row(
+            MyFilledButton(
+                speedToBeConverted,
+                convertedSpeed,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    onClick = {
-                        val speed = speedToBeConverted.value.toDoubleOrNull() ?: return@Button
-                        convertedSpeed.value = convertKmHToMinKm(speed)
-                        Log.d("SpeedConverter", "Speed: $speed km/h, Min/km: ${convertedSpeed.value} min/km")
-                    }
-                ) {
-                    Text("Convert")
-                }
+                    .size(220.dp, 80.dp)
+                    .padding(8.dp),
+                contentPadding = PaddingValues(16.dp)
+            )
 
-                Spacer(modifier = Modifier.width(16.dp))
-            }
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Center
-            ){
+            if (convertedSpeed.value.isNotEmpty()) {
+                Log.d("SpeedConverter", "SpeedConverterPage: ${convertedSpeed.value}")
                 Text(
-                    text = "${convertedSpeed.value} min/km",
-                    modifier = Modifier.align(Alignment.CenterVertically)
+                    text = formatSpeedToMinutesAndSeconds(convertedSpeed.value),
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 16.dp)
                 )
             }
         }
@@ -107,7 +102,64 @@ fun convertKmHToMinKm(kmH: Double): String {
     return String.format("%.2f", minKm)
 }
 
+fun formatSpeedToMinutesAndSeconds(speed: String): String {
+    // Vaihdetaan mahdollinen pilkku pisteeksi
+    val cleanedSpeed = speed.trim().replace(',', '.')
 
+    // Yritetään muuntaa syöte desimaaliluvuksi
+    val speedDouble = cleanedSpeed.toDoubleOrNull()
+
+    if (speedDouble == null || speedDouble <= 0) {
+        return "Virheellinen nopeus"
+    }
+
+    // Lasketaan minuutit ja sekunnit
+    val minutes = speedDouble.toInt()
+    val seconds = ((speedDouble - minutes) * 60).toInt()
+
+    // Jos sekunteja ei ole, tulostetaan vain minuutit
+    return if (seconds == 0) {
+        "$minutes min / km"
+    } else {
+        "$minutes min $seconds s / km"
+    }
+}
+
+
+@Composable
+fun MyFilledButton(
+    speedToBeConverted: MutableState<String>,
+    convertedSpeed: MutableState<String>,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    shape: Shape = ButtonDefaults.shape,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    border: BorderStroke? = null,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    interactionSource: MutableInteractionSource? = null
+) {
+    Button(
+        onClick = {
+            // Vaihdetaan mahdollinen syöteen pilkku pisteeksi ja muunnetaa Doubleksi
+            val cleanedSpeed = speedToBeConverted.value.trim().replace(',', '.')
+            val speed = cleanedSpeed.toDoubleOrNull() ?: return@Button
+            convertedSpeed.value = convertKmHToMinKm(speed)
+        },
+        modifier = modifier,
+        enabled = enabled,
+        shape = shape,
+        colors = colors,
+        elevation = elevation,
+        border = border,
+        contentPadding = contentPadding,
+        interactionSource = interactionSource ?: remember { MutableInteractionSource() }
+    ) {
+        Text("CONVERT",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold )
+    }
+}
 
 @Preview
 @Composable
