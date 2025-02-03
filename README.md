@@ -10,6 +10,8 @@
 - ⌨️ Input field for entering speed
 - 🔘 Button to trigger the conversion
 - 📊 Displays the converted speed in minutes and seconds per kilometer
+- 📌 Future update: **Support for multiple speed units (e.g., mph, m/s, ft/s, knots)**
+- 📌 Future update: **Dropdown menu to select different conversion options**
 
 ---
 
@@ -47,8 +49,18 @@ Then, build and run the app on an **Android device or emulator**.
 
 ---
 
+## 💡 Future Development Ideas
+- 🔹 Create tests and handle edge cases
+- 🔹 **Support for multiple speed units** (miles per hour, meters per second, feet per second, knots, etc.)
+- 🔹 **Dropdown menus** for selecting the desired conversion units
+- 🔹 **Real-time conversion** as the user types
+- 🔹 **Dark mode support**
+- 🔹 **Save recent conversions for quick access**
+
+---
+
 ## 📸 Screenshots
-*(Add screenshots here if available)*
+![Screenshot](app/speed_converter_ui.jpg)
 
 ---
 
