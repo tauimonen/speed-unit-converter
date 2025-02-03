@@ -60,7 +60,7 @@ Then, build and run the app on an **Android device or emulator**.
 ---
 
 ## 📸 Screenshots
-![Screenshot](app/speed_converter_ui.jpg)
+<img src="app/speed_converter_ui.jpg" width="20%" />
 
 ---
 
