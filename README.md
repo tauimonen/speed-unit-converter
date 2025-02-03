@@ -67,8 +67,3 @@ Then, build and run the app on an **Android device or emulator**.
 ## 📜 License
 This project is licensed under the **MIT License**. See the LICENSE file for more details.
 
----
-
-## 👤 Author
-Developed by **[Your Name]** (or your GitHub/website link).
-
